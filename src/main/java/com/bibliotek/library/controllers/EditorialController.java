@@ -55,6 +55,10 @@ public class EditorialController {
 	@PutMapping
 	public ResponseEntity<?>putOne(@RequestBody Editorial nuevo){
 		Editorial actualizado = editorialService.guardar(nuevo);
+		if(actualizado == null) {
+			return new ResponseEntity<>
+			("El nombre de la editorial no puede repetirse, estar vacio o en blanco", HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<>(actualizado,HttpStatus.OK);
 	}
 	
