@@ -74,6 +74,6 @@ public class EditorialController {
 		if(actual == null) {
 			return new ResponseEntity <>(HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(actual, HttpStatus.OK);
+		return new ResponseEntity <>(actual, HttpStatus.OK);
 	}
 }
