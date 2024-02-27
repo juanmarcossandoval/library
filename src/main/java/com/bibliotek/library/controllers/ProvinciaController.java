@@ -1,5 +1,6 @@
 package com.bibliotek.library.controllers;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,16 +38,10 @@ public class ProvinciaController {
 		return new ResponseEntity<>(nuevop, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/filter")
-	public ResponseEntity <?> findByName(@RequestParam String nombre){
-		List<Provincia> encontrados = provinciaService.buscarPorNombre(nombre);
-		return new ResponseEntity <>(encontrados, HttpStatus.OK);
-	}
-	
 	@GetMapping
-	public ResponseEntity<?> getAll(){
-		List<Provincia> lista = provinciaService.listarTodos();
-		return new ResponseEntity<>(lista,HttpStatus.OK);
+	public ResponseEntity <?> findByName(@RequestParam(required = false)Optional<String> nombre){
+		List<Provincia> encontrados = provinciaService.filtrar(nombre);		
+		return new ResponseEntity <>(encontrados, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
@@ -76,7 +71,7 @@ public class ProvinciaController {
 	
 	@PatchMapping
 	public ResponseEntity<?>patchOne(@RequestBody Provincia actualizado){
-		Provincia actual = provinciaService.crearNuevaP(actualizado);
+		Provincia actual = provinciaService.actualizar(actualizado);
 		if(actual == null) {
 			return new ResponseEntity <>(HttpStatus.BAD_REQUEST);
 		}

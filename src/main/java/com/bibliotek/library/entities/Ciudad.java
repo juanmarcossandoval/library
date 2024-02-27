@@ -1,7 +1,5 @@
 package com.bibliotek.library.entities;
 
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,10 +26,8 @@ public class Ciudad {
 	@Column (name = "nombre" , nullable = false, unique = true, length = 50)
 	private String nombre;
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "fk_id_provincia" , referencedColumnName = "id_provincia")
+	@ManyToOne(optional = false)
+	@JoinColumn(referencedColumnName = "id_provincia")
 	private Provincia provincia;
-	
-	
-	
+		
 }

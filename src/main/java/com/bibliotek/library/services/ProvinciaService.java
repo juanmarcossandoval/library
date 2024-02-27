@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.bibliotek.library.entities.Provincia;
 import com.bibliotek.library.repositories.ProvinciaRepository;
 
+import utils.StringUtils;
+
 @Service
 public class ProvinciaService {
 	private ProvinciaRepository provinciaRepository;
@@ -44,4 +46,37 @@ public class ProvinciaService {
 	public List<Provincia> listarTodos(){
 		return this.provinciaRepository.findAll();
 	}
+	
+	public List<Provincia> filtrar(Optional<String> nombre){
+		if(nombre.isPresent()) {
+			return this.buscarPorNombre(nombre.get());
+		}
+		return this.listarTodos();
+	}
+	
+	public Provincia actualizar(Provincia actualizada) {
+		if(invalidProv(actualizada))return null;
+		Provincia existente = this.buscarPorId(actualizada.getId_provincia());
+		if (existente == null) return null;
+		if(existente.equals(actualizada)) return actualizada;
+		if(invalidName(actualizada)) return null;
+		return this.provinciaRepository.save(actualizada);
+	}
+	
+	public boolean invalidProv(Provincia prov) {
+		if (prov == null) return true;
+		if (prov.getId_provincia() == null) return true;
+		if (StringUtils.Check(prov.getNombre())) return true;
+		return false;
+	}
+	
+	public boolean invalidName(Provincia actualizada) {
+		//chequeamos el nombre ahora para que no se repita
+		List<Provincia> encontradas = this.provinciaRepository.findByName(actualizada.getNombre());
+		// si encontro mas de una hay una inconsistencia en la base de datos
+		if (encontradas.size() > 1) return true;
+		if (encontradas.isEmpty()) return false;
+		return encontradas.get(0).getId_provincia()!= actualizada.getId_provincia();
+	}
+	
 }
