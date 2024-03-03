@@ -30,13 +30,8 @@ public class CiudadController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> postOne(@RequestBody Ciudad nuevo) throws NotFoundException {
+	public ResponseEntity<?> postOne(@RequestBody Ciudad nuevo) throws NotFoundException, BadRequestException {
 		Ciudad nuevaC = ciudadService.crearNuevaC(nuevo);
-		if (nuevaC == null) {
-			return new ResponseEntity<>(
-					"El nombre no puede estar vacio,ni estar en blanco, o no puede repetirse la ciudad",
-					HttpStatus.BAD_REQUEST);
-		}
 		return new ResponseEntity<>(nuevaC, HttpStatus.CREATED);
 	}
 
