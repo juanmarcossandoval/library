@@ -7,7 +7,7 @@ public class StringUtils {
 	 * @return verdadero si esta vacio, blanco o nulo.
 	 */
 	public static boolean Check (String s) {
-		return s.equals(null) || s.isBlank() || s.isEmpty();
+		return null == s || s.isBlank() || s.isEmpty();
 	}
 }
 //los strings no se comparan por == (chequea la direciones de memoria, operador de igualdad)
