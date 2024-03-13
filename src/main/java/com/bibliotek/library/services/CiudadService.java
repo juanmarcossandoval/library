@@ -10,11 +10,9 @@ import com.bibliotek.library.exceptions.BadRequestException;
 import com.bibliotek.library.exceptions.NotFoundException;
 import com.bibliotek.library.repositories.CiudadRepository;
 
-import jakarta.transaction.Transactional;
 import utils.StringUtils;
 
 @Service
-@Transactional
 public class CiudadService {
 	private CiudadRepository ciudadRepo;
 	private ProvinciaService provinciaServ;
@@ -35,7 +33,7 @@ public class CiudadService {
             throw new BadRequestException("El nombre de la Ciudad no puede ser nulo");
         if(StringUtils.Check(nuevo.getNombre())) 
             throw new BadRequestException("El nombre de la Ciudad no puede estar vacio o en blanco");
-        List<Ciudad>encontrados = buscarPorNombre(nuevo.getNombre());
+        List<Ciudad>encontrados = this.buscarPorNombre(nuevo.getNombre());
         if(!encontrados.isEmpty()) //si la lista no esta vacia, entra en el throw.
             throw new BadRequestException("Ya existe una ciudad con ese nombre.");
         this.provinciaServ.invalidProvData(nuevo.getProvincia());
@@ -44,7 +42,7 @@ public class CiudadService {
 	}
 	
 	public List <Ciudad> buscarPorNombre(String nombre) {
-		return this.ciudadRepo.findByName (nombre);
+		return this.ciudadRepo.findByName(nombre);
 	}
 	
 	public Ciudad buscarPorId (Long id) throws NotFoundException {
@@ -62,7 +60,7 @@ public class CiudadService {
 	
 	public Ciudad actualizar(Ciudad actualizada) throws NotFoundException, BadRequestException {
 		//valida que esten todos los datos de la ciudad
-		this.invalidCity(actualizada);
+		this.invalidCityData(actualizada);
 		//valida que esten todos los datos de la provincia hija del objeto
 		this.provinciaServ.invalidProvData(actualizada.getProvincia());
 		//como es un update valida que exista una ciudad con ese ID
@@ -79,7 +77,7 @@ public class CiudadService {
 		return this.ciudadRepo.save(actualizada);
 	}
 	
-	public void invalidCity(Ciudad ciudad) throws BadRequestException {
+	public void invalidCityData(Ciudad ciudad) throws BadRequestException {
 		//que la ciudad no este vacia
 		if (ciudad == null) 
 			throw new BadRequestException("La ciudad deberia contener algun dato");
@@ -91,6 +89,7 @@ public class CiudadService {
 		// porque el nombre vino vacio
 		if (StringUtils.Check(ciudad.getNombre()))
 			throw new BadRequestException("El nombre de la Ciudad no puede ser nula, vacia, o en blanco. ");
+		
 	}
 	
 	public boolean invalidName(Ciudad actualizada) {
@@ -100,5 +99,17 @@ public class CiudadService {
 		if (encontradas.size() > 1) return true;
 		if (encontradas.isEmpty()) return false;
 		return encontradas.get(0).getId_ciudad()!= actualizada.getId_ciudad();
+	}
+	
+	public void isValidCity(Ciudad city) throws NotFoundException, BadRequestException {
+		Ciudad encontrada = this.buscarPorId(city.getId_ciudad());
+		if(!encontrada.equals(city))
+			throw new BadRequestException("Los datos de la ciudad y provincia no se corresponden con los guardados en la Base de Datos");
+	}
+	
+	public List<Ciudad> filtrar(Optional<String> nombre){
+		if (nombre.isPresent())
+			return this.buscarPorNombre(nombre.get());
+		return this.listarTodos();
 	}
 }

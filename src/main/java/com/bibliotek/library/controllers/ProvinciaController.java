@@ -31,44 +31,32 @@ public class ProvinciaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> postOne(@RequestBody Provincia nuevo){
-		Provincia nuevop = provinciaService.crearNuevaP(nuevo);
-		if (nuevop == null) {
-			return new ResponseEntity<>("El nombre no puede estar vacio, ni estar en blanco, o no puede repetirse la Provincia.", HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<?> postOne(@RequestBody Provincia nuevo) throws BadRequestException{
+		Provincia nuevop = this.provinciaService.crearNuevaP(nuevo);
 		return new ResponseEntity<>(nuevop, HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	public ResponseEntity <?> findByName(@RequestParam(required = false)Optional<String> nombre){
-		List<Provincia> encontrados = provinciaService.filtrar(nombre);		
+	public ResponseEntity <?> findByName(@RequestParam Optional<String> nombre){
+		List<Provincia> encontrados = this.provinciaService.filtrar(nombre);		
 		return new ResponseEntity <>(encontrados, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity <?> findOne(@PathVariable Long id) throws NotFoundException {
-		Provincia encontrado = provinciaService.buscarPorId(id);
+		Provincia encontrado = this.provinciaService.buscarPorId(id);
 		return new ResponseEntity<>(encontrado,HttpStatus.OK);
 	}
 	
 	@PutMapping
 	public ResponseEntity<?>putOne(@RequestBody Provincia nuevo) throws BadRequestException, NotFoundException{
-		Provincia actualizado = provinciaService.actualizar(nuevo);
+		Provincia actualizado = this.provinciaService.actualizar(nuevo);
 		return new ResponseEntity<>(actualizado,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteOne(@PathVariable Long id){
-		provinciaService.eliminarPorid(id);
+		this.provinciaService.eliminarPorid(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	/*@PatchMapping
-	public ResponseEntity<?>patchOne(@RequestBody Provincia actualizado){
-		Provincia actual = provinciaService.actualizar(actualizado);
-		if(actual == null) {
-			return new ResponseEntity <>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity <> (actual, HttpStatus.OK);
-	}*/
 }
