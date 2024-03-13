@@ -27,7 +27,7 @@ public class ProvinciaService {
 			throw new BadRequestException("El nombre de la Provincia no puede ser nulo");
 		if(StringUtils.Check(nuevo.getNombre()))
 			throw new BadRequestException("El nombre de la Provincia no puede estar vacio o en blanco .");
-		List<Provincia> encontrados = buscarPorNombre(nuevo.getNombre());
+		List<Provincia> encontrados = this.buscarPorNombre(nuevo.getNombre());
 		if (!encontrados.isEmpty()) 
 			throw new BadRequestException("Ya existe una Provincia con ese nombre");
 		return this.provinciaRepository.save(nuevo);
@@ -94,7 +94,7 @@ public class ProvinciaService {
 	public void isValidProv(Provincia prov) throws BadRequestException, NotFoundException {
 		//checkeamos que los datos de la provincia se correspondan con los de la bdd.
 		Provincia encontrada = this.buscarPorId(prov.getId_provincia());
-		if(encontrada != prov) {
+		if(encontrada.equals(prov)) {
 			throw new BadRequestException("Los datos de Provincia guardados para este ID de Provincia, no se corresponden con los de la peticion.");
 		}
 	}
