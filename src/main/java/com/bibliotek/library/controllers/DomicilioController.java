@@ -33,7 +33,7 @@ public class DomicilioController {
 	@PostMapping
 	public ResponseEntity<?> postOne(@RequestBody Domicilio nuevo) throws BadRequestException, NotFoundException{
 		Domicilio nuevoD = this.domicilioService.crearNuevod(nuevo);
-		return new ResponseEntity<>(nuevoD, HttpStatus.OK);
+		return new ResponseEntity<>(nuevoD, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
