@@ -25,7 +25,7 @@ public class User {
 	@NotBlank
 	@NotEmpty
 	@NotNull
-	@Length(min = 8, max = 50)
+	@Length(max = 50)
 	@Column(nullable = false, unique = true, length = 50)
 	private String username;
 	
