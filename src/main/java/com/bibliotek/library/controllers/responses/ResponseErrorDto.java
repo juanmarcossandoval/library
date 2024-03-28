@@ -1,4 +1,4 @@
-package com.bibliotek.library.controllers;
+package com.bibliotek.library.controllers.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -21,24 +21,14 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@NotBlank
-	@NotEmpty
-	@NotNull
-	@Length(max = 50)
+
 	@Column(nullable = false, unique = true, length = 50)
 	private String username;
-	
-	@Email
-	@NotNull
+
 	@Column(nullable = false, unique = true)
-	private String mail;
-	
-	@NotBlank
-	@NotEmpty
-	@NotNull
-	@Length(min = 8, max = 50)
-	@Column(nullable = false, length = 50)
+	private String email;
+
+	@Column(nullable = false)
 	private String password;
 	
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Role.class, cascade = CascadeType.PERSIST)
